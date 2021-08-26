@@ -1,17 +1,25 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <TheNavigation />
   </div>
   <router-view />
 </template>
+<script lang="ts">
+import { Options, Vue } from "vue-class-component";
+import TheNavigation from "@/components/TheNavigation.vue";
 
+@Options({
+  components: {
+    TheNavigation,
+  },
+})
+export default class Home extends Vue {}
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 

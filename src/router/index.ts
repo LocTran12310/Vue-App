@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
+import store from "@/store/index";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -16,11 +17,36 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
+  {
+    path: "/user",
+    name: "user",
+    component: () =>
+      import(/* webpackChunkName: "User" */ "../views/User.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () =>
+      import(/* webpackChunkName: "Login" */ "../views/Login.vue"),
+  },
 ];
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (Object.keys(store.state.user).length === 0) {
+      next({ name: 'login', query: { redirect: to.fullPath } });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+})
 
 export default router;
